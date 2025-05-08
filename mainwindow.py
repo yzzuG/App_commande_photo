@@ -4,7 +4,7 @@
 # pyside6-uic form.ui -o ui_form.p
 
 # pyinstaller --noconfirm --onefile --windowed --icon=icone.ico --add-data=M.A.PHOTO.png:ressources -n MA_Photo_commande_V1_0 mainwindow.py
-# pyinstaller --noconfirm --windowed --icon=icone.ico --add-data=M.A.PHOTO.png:ressources -n MA_Photo_commande_V1_0 mainwindow.py
+# pyinstaller --noconfirm --windowed --icon=icone.ico --add-data=M.A.PHOTO.png:ressources -n MA_Photo_commande_V1_2 mainwindow.py
 
 
 
@@ -30,7 +30,7 @@ from ui_form import Ui_MainWindow
 
 selected_images = []
 data_save_folder = "C:"
-admin_password = ""
+admin_password = "Armus2025"
 photos_folder ="C:"
 
 
@@ -860,7 +860,7 @@ class MainWindow(QMainWindow):
 
         self.formulaire_handler = FormulaireHandler(self.ui)
 
-        #self.setWindowFlags(Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+        self.setWindowFlags(Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.showFullScreen()
     def rounded_pixmap(self, pixmap, radius):
         size = pixmap.size()
@@ -878,7 +878,7 @@ class MainWindow(QMainWindow):
         return rounded
 
     def closeEvent(self, event):
-        """if event.spontaneous():
+        if event.spontaneous():
             event.ignore()
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Information)
@@ -887,7 +887,7 @@ class MainWindow(QMainWindow):
             msg.setWindowFlags(Qt.WindowStaysOnTopHint)
             msg.exec()
         else:
-            event.accept()"""
+            event.accept()
         event.accept()
 
     def afficher_image(self, index):
