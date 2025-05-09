@@ -2,8 +2,6 @@
 
 # .\.qtcreator\Python_3_13_2venv\Scripts\activate
 # pyside6-uic form.ui -o ui_form.p
-
-# pyinstaller --noconfirm --onefile --windowed --icon=icone.ico --add-data=M.A.PHOTO.png:ressources -n MA_Photo_commande_V1_0 mainwindow.py
 # pyinstaller --noconfirm --windowed --icon=icone.ico --add-data=M.A.PHOTO.png:ressources -n MA_Photo_commande_V1_2 mainwindow.py
 
 

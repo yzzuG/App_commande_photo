@@ -586,6 +586,16 @@ QComboBox QAbstractItemView{
          <string>Virement bancaire</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>Espèce</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Chèque</string>
+        </property>
+       </item>
       </widget>
       <widget class="QTextEdit" name="textEdit_remarque">
        <property name="geometry">
