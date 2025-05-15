@@ -314,6 +314,8 @@ class Ui_MainWindow(object):
         self.comboBox_paiement.addItem("")
         self.comboBox_paiement.addItem("")
         self.comboBox_paiement.addItem("")
+        self.comboBox_paiement.addItem("")
+        self.comboBox_paiement.addItem("")
         self.comboBox_paiement.setObjectName(u"comboBox_paiement")
         self.comboBox_paiement.setGeometry(QRect(20, 410, 361, 31))
         self.comboBox_paiement.setStyleSheet(u"/* COMBO BOX */\n"
@@ -801,6 +803,8 @@ class Ui_MainWindow(object):
         self.comboBox_paiement.setItemText(2, QCoreApplication.translate("MainWindow", u"Lydia", None))
         self.comboBox_paiement.setItemText(3, QCoreApplication.translate("MainWindow", u"Paypal", None))
         self.comboBox_paiement.setItemText(4, QCoreApplication.translate("MainWindow", u"Virement bancaire", None))
+        self.comboBox_paiement.setItemText(5, QCoreApplication.translate("MainWindow", u"Esp\u00e8ce", None))
+        self.comboBox_paiement.setItemText(6, QCoreApplication.translate("MainWindow", u"Ch\u00e8que", None))
 
         self.label_remarque.setText(QCoreApplication.translate("MainWindow", u"Remarque ou demande particuli\u00e8re :", None))
         self.button_sauvegarder_formulaire.setText(QCoreApplication.translate("MainWindow", u"Sauvergarder", None))

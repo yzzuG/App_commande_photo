@@ -24,18 +24,19 @@ from PySide6.QtGui import QPixmap, QImage, QPainter, QPainterPath, QIcon
 from PySide6.QtCore import Qt, QSize
 
 from ui_form import Ui_MainWindow
-
+from ui_dialog import Ui_Dialog
 
 selected_images = []
 data_save_folder = "C:"
-admin_password = "Armus2025"
+admin_password = ""
 photos_folder ="C:"
-
+restrict_mode = 0
 
 
 class FormulaireHandler:
     def __init__(self, ui):
         self.ui = ui
+
 
         self.ui.button_nouveau_formulaire.clicked.connect(self.nouveau_formulaire)
         self.ui.button_charger_formulaire.clicked.connect(self.charger_formulaire)
@@ -526,52 +527,21 @@ class PasswordDialog(QDialog):
 class DossierDialog(QDialog):
     def __init__(self, parent=None, model=None, treeView=None):
         super().__init__(parent)
+
+        self.ui = Ui_Dialog()
+        self.ui.setupUi(self)
+
         self.setWindowTitle("Changer le dossier racine")
         self.setFixedSize(300, 200)
-        self.setStyleSheet("background-color:rgb(71,72,73)")
 
         self.model = model
         self.treeView = treeView
 
-        layout = QVBoxLayout()
 
-        self.bouton_choisir = QPushButton("Choisir un nouveau dossier de photo")
-        self.bouton_choisir.setStyleSheet("""QPushButton {background-color: rgb(100,101,102);
-                                                        color: rgb(255,255,255);
-                                                        border-radius: 7px;
-                                                        text-align: center;}
-                                            QPushButton:hover {background-color: rgb(100,101,150);}
-                                            QPushButton:pressed{background-color: rgb(185,0,92);}
-                                            QPushButton:selected{background-color: rgb(100,101,150);}""")
-        self.bouton_choisir.setFixedSize(280, 30)
-        self.bouton_choisir.clicked.connect(self.choisir_nouveau_dossier)
-
-        self.bouton_save = QPushButton("Choisir un nouveau dossier sauvegarde")
-        self.bouton_save.setStyleSheet("""QPushButton {background-color: rgb(100,101,102);
-                                                    color: rgb(255,255,255);
-                                                    border-radius: 7px;
-                                                    text-align: center;}
-                                            QPushButton:hover {background-color: rgb(100,101,150);}
-                                            QPushButton:pressed{background-color: rgb(185,0,92);}
-                                            QPushButton:selected{background-color: rgb(100,101,150);}""")
-        self.bouton_save.setFixedSize(280, 30)
-        self.bouton_save.clicked.connect(self.choisir_nouveau_dossier_data)
-
-        self.bouton_fermer = QPushButton("Fermer l'interface")
-        self.bouton_fermer.setStyleSheet("""QPushButton {background-color: rgb(200,101,102);
-                                                    color: rgb(255,255,255);
-                                                    border-radius: 7px;
-                                                    text-align: center;}
-                                            QPushButton:hover {background-color: rgb(100,101,150);}
-                                            QPushButton:pressed{background-color: rgb(185,0,92);}
-                                            QPushButton:selected{background-color: rgb(100,101,150);}""")
-        self.bouton_fermer.setFixedSize(280, 30)
-        self.bouton_fermer.clicked.connect(self.fermer_application)
-
-        layout.addWidget(self.bouton_choisir)
-        layout.addWidget(self.bouton_save)
-        layout.addWidget(self.bouton_fermer)
-        self.setLayout(layout)
+        self.ui.bouton_choisir.clicked.connect(self.choisir_nouveau_dossier)
+        self.ui.bouton_save.clicked.connect(self.choisir_nouveau_dossier_data)
+        self.ui.bouton_fermer.clicked.connect(self.fermer_application)
+        self.ui.restrict_mode.clicked.connect(self.deifne_restrict_mode)
 
     def choisir_nouveau_dossier(self):
         dialog = QFileDialog(self)
@@ -771,6 +741,11 @@ class DossierDialog(QDialog):
                 global data_save_folder
                 data_save_folder = dossier
 
+    def deifne_restrict_mode(self):
+        global restrict_mode
+        restrict_mode = self.ui.restrict_mode.isChecked
+        print(f"etat :{restrict_mode}")
+
 
 
     def fermer_application(self):
@@ -858,8 +833,9 @@ class MainWindow(QMainWindow):
 
         self.formulaire_handler = FormulaireHandler(self.ui)
 
-        self.setWindowFlags(Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
-        self.showFullScreen()
+        #self.setWindowFlags(Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+        #self.showFullScreen()
+        self.show()
     def rounded_pixmap(self, pixmap, radius):
         size = pixmap.size()
         # Crée un QPixmap transparent pour le résultat
