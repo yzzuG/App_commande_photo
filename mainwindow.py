@@ -4,7 +4,7 @@
 # pyside6-uic form.ui -o ui_form.p
 # pyinstaller --noconfirm --windowed --icon=icone.ico --add-data=M.A.PHOTO.png:ressources -n MA_Photo_commande_V1_2 mainwindow.py
 
-
+#15:18
 
 import sys
 import os
