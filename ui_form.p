@@ -25,8 +25,8 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1894, 1043)
-        MainWindow.setMinimumSize(QSize(500, 300))
+        MainWindow.resize(1911, 1055)
+        MainWindow.setMinimumSize(QSize(1200, 940))
         MainWindow.setMaximumSize(QSize(1000000, 1000000))
         MainWindow.setStyleSheet(u"background-color:rgb(41,42,43);")
         self.centralwidget = QWidget(MainWindow)
@@ -314,8 +314,10 @@ class Ui_MainWindow(object):
         self.comboBox_paiement.addItem("")
         self.comboBox_paiement.addItem("")
         self.comboBox_paiement.addItem("")
+        self.comboBox_paiement.addItem("")
+        self.comboBox_paiement.addItem("")
         self.comboBox_paiement.setObjectName(u"comboBox_paiement")
-        self.comboBox_paiement.setGeometry(QRect(20, 410, 361, 31))
+        self.comboBox_paiement.setGeometry(QRect(20, 410, 231, 31))
         self.comboBox_paiement.setStyleSheet(u"/* COMBO BOX */\n"
 "QComboBox {\n"
 "	border: none;\n"
@@ -350,14 +352,14 @@ class Ui_MainWindow(object):
 "}")
         self.textEdit_remarque = QTextEdit(self.frame_formulaire)
         self.textEdit_remarque.setObjectName(u"textEdit_remarque")
-        self.textEdit_remarque.setGeometry(QRect(20, 480, 361, 111))
+        self.textEdit_remarque.setGeometry(QRect(20, 480, 361, 71))
         self.textEdit_remarque.setStyleSheet(u"background-color: rgb(101,102,103);color:#FFFFFF;")
         self.label_remarque = QLabel(self.frame_formulaire)
         self.label_remarque.setObjectName(u"label_remarque")
         self.label_remarque.setGeometry(QRect(20, 460, 361, 16))
         self.button_sauvegarder_formulaire = QPushButton(self.frame_formulaire)
         self.button_sauvegarder_formulaire.setObjectName(u"button_sauvegarder_formulaire")
-        self.button_sauvegarder_formulaire.setGeometry(QRect(40, 610, 160, 50))
+        self.button_sauvegarder_formulaire.setGeometry(QRect(40, 570, 160, 50))
         self.button_sauvegarder_formulaire.setMinimumSize(QSize(160, 50))
         self.button_sauvegarder_formulaire.setMaximumSize(QSize(160, 50))
         self.button_sauvegarder_formulaire.setFont(font)
@@ -409,7 +411,7 @@ class Ui_MainWindow(object):
         self.lineEdit_id.setReadOnly(True)
         self.button_quitter_formulaire = QPushButton(self.frame_formulaire)
         self.button_quitter_formulaire.setObjectName(u"button_quitter_formulaire")
-        self.button_quitter_formulaire.setGeometry(QRect(210, 610, 151, 50))
+        self.button_quitter_formulaire.setGeometry(QRect(210, 570, 151, 50))
         self.button_quitter_formulaire.setMinimumSize(QSize(100, 50))
         self.button_quitter_formulaire.setMaximumSize(QSize(160, 50))
         self.button_quitter_formulaire.setFont(font)
@@ -436,6 +438,16 @@ class Ui_MainWindow(object):
 "border-radius : 5px;\n"
 "background-color:rgb(101,102,103);color:#FFFFFF;")
         self.lineEdit_photos.setReadOnly(True)
+        self.lineEdit_photos_2 = QLineEdit(self.frame_formulaire)
+        self.lineEdit_photos_2.setObjectName(u"lineEdit_photos_2")
+        self.lineEdit_photos_2.setGeometry(QRect(270, 410, 111, 31))
+        self.lineEdit_photos_2.setStyleSheet(u"border:none;\n"
+"border-radius : 5px;\n"
+"background-color:rgb(101,102,103);color:#FFFFFF;")
+        self.lineEdit_photos_2.setReadOnly(True)
+        self.label_paiement_2 = QLabel(self.frame_formulaire)
+        self.label_paiement_2.setObjectName(u"label_paiement_2")
+        self.label_paiement_2.setGeometry(QRect(270, 390, 71, 20))
 
         self.gridLayout.addWidget(self.frame_formulaire, 0, 3, 2, 1)
 
@@ -739,7 +751,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1894, 21))
+        self.menubar.setGeometry(QRect(0, 0, 1911, 21))
         self.menubar.setStyleSheet(u"QMenuBar {\n"
 "  spacing : 10px;\n"
 "background-color:rgb(71,72,73);\n"
@@ -801,12 +813,15 @@ class Ui_MainWindow(object):
         self.comboBox_paiement.setItemText(2, QCoreApplication.translate("MainWindow", u"Lydia", None))
         self.comboBox_paiement.setItemText(3, QCoreApplication.translate("MainWindow", u"Paypal", None))
         self.comboBox_paiement.setItemText(4, QCoreApplication.translate("MainWindow", u"Virement bancaire", None))
+        self.comboBox_paiement.setItemText(5, QCoreApplication.translate("MainWindow", u"Esp\u00e8ce", None))
+        self.comboBox_paiement.setItemText(6, QCoreApplication.translate("MainWindow", u"Ch\u00e8que", None))
 
         self.label_remarque.setText(QCoreApplication.translate("MainWindow", u"Remarque ou demande particuli\u00e8re :", None))
         self.button_sauvegarder_formulaire.setText(QCoreApplication.translate("MainWindow", u"Sauvergarder", None))
         self.label_id.setText(QCoreApplication.translate("MainWindow", u"ID de commande :", None))
         self.button_quitter_formulaire.setText(QCoreApplication.translate("MainWindow", u"Abandonner", None))
         self.label_photos.setText(QCoreApplication.translate("MainWindow", u"Photos choisis : ", None))
+        self.label_paiement_2.setText(QCoreApplication.translate("MainWindow", u"Prix :", None))
         self.label_logo.setText("")
         self.labelImage.setText(QCoreApplication.translate("MainWindow", u"Selectionner une photo", None))
         self.labelNomImage.setText(QCoreApplication.translate("MainWindow", u"Nom de la photo", None))

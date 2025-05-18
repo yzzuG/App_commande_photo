@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1894</width>
-    <height>1043</height>
+    <width>1911</width>
+    <height>1055</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>500</width>
-    <height>300</height>
+    <width>1200</width>
+    <height>940</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -523,7 +523,7 @@ QPushButton:selected{
         <rect>
          <x>20</x>
          <y>410</y>
-         <width>361</width>
+         <width>231</width>
          <height>31</height>
         </rect>
        </property>
@@ -603,7 +603,7 @@ QComboBox QAbstractItemView{
          <x>20</x>
          <y>480</y>
          <width>361</width>
-         <height>111</height>
+         <height>71</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -627,7 +627,7 @@ QComboBox QAbstractItemView{
        <property name="geometry">
         <rect>
          <x>40</x>
-         <y>610</y>
+         <y>570</y>
          <width>160</width>
          <height>50</height>
         </rect>
@@ -762,7 +762,7 @@ color:#FFFFFF;</string>
        <property name="geometry">
         <rect>
          <x>210</x>
-         <y>610</y>
+         <y>570</y>
          <width>151</width>
          <height>50</height>
         </rect>
@@ -836,6 +836,37 @@ background-color:rgb(101,102,103);color:#FFFFFF;</string>
        </property>
        <property name="readOnly">
         <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="lineEdit_photos_2">
+       <property name="geometry">
+        <rect>
+         <x>270</x>
+         <y>410</y>
+         <width>111</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border:none;
+border-radius : 5px;
+background-color:rgb(101,102,103);color:#FFFFFF;</string>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_paiement_2">
+       <property name="geometry">
+        <rect>
+         <x>270</x>
+         <y>390</y>
+         <width>71</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Prix :</string>
        </property>
       </widget>
      </widget>
@@ -1281,7 +1312,7 @@ QPushButton:selected{
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1894</width>
+     <width>1911</width>
      <height>21</height>
     </rect>
    </property>

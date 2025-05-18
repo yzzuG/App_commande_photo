@@ -2,6 +2,8 @@
 
 # .\.qtcreator\Python_3_13_2venv\Scripts\activate
 # pyside6-uic form.ui -o ui_form.p
+# pyside6-uic dialog.ui -o ui_dialog.p
+# pyside6-uic fili.ui -o ui_fili.p
 # pyinstaller --noconfirm --windowed --icon=icone.ico --add-data=M.A.PHOTO.png:ressources -n MA_Photo_commande_V1_2 mainwindow.py
 
 
@@ -12,25 +14,82 @@ import time
 import shutil
 import pandas as pd
 import smtplib
+from PIL import Image, ExifTags
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from datetime import datetime
 
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QFileSystemModel, QListWidgetItem, QFileDialog,
-    QDialog, QVBoxLayout, QLineEdit, QLabel, QPushButton, QMessageBox,QInputDialog
+    QDialog, QWidget, QVBoxLayout, QLineEdit, QLabel, QPushButton, QMessageBox,QInputDialog
 )
-from PySide6.QtGui import QPixmap, QImage, QPainter, QPainterPath, QIcon
-from PySide6.QtCore import Qt, QSize
+from PySide6.QtGui import QPixmap, QImage, QPainter, QPainterPath, QIcon, QFont, QColor
+from PySide6.QtCore import Qt, QSize, QRect
 
 from ui_form import Ui_MainWindow
 from ui_dialog import Ui_Dialog
+from ui_fili import Ui_Fili
+
+# EXIF pour orientation
+EXIF_ORIENTATION_TAG = next((k for k, v in ExifTags.TAGS.items() if v == "Orientation"), None)
 
 selected_images = []
 data_save_folder = "C:"
 admin_password = ""
 photos_folder ="C:"
+fili_clair_path = ""
+fili_sombre_path = ""
 restrict_mode = 0
+
+
+def corriger_orientation(image_pil):
+    try:
+        exif = image_pil._getexif()
+        if exif is not None:
+            for tag, value in exif.items():
+                key = ExifTags.TAGS.get(tag, tag)
+                if key == 'Orientation':
+                    if value == 3:
+                        image_pil = image_pil.rotate(180, expand=True)
+                    elif value == 6:
+                        image_pil = image_pil.rotate(270, expand=True)
+                    elif value == 8:
+                        image_pil = image_pil.rotate(90, expand=True)
+    except Exception as e:
+        print(f"Erreur EXIF : {e}")
+    return image_pil
+
+def pil_to_qimage(pil_image):
+    pil_image = pil_image.convert("RGBA")
+    data = pil_image.tobytes("raw", "RGBA")
+    qimage = QImage(data, pil_image.width, pil_image.height, QImage.Format_RGBA8888)
+    return qimage
+
+
+def add_watermark(image):
+    #image = corriger_orientation(image).convert('RGBA')
+
+    watermark_width = int(image.width * 0.3)
+
+
+    global fili_clair_path
+    watermark_path = fili_clair_path
+
+    try:
+        watermark = Image.open(watermark_path).convert("RGBA")
+        watermark_height = int(watermark_width * (watermark.height / watermark.width))
+        watermark = watermark.resize((watermark_width, watermark_height), Image.LANCZOS)
+    except Exception as e:
+        print(f"Erreur ouverture watermark : {e}")
+        return
+
+    position = ((image.width - watermark_width) // 2, image.height - watermark_height - 20)
+
+    watermarked = image.copy()
+    watermarked.paste(watermark, position, watermark)
+    watermarked = watermarked.convert("RGB")
+
+    return watermarked
 
 
 class FormulaireHandler:
@@ -246,7 +305,7 @@ class FormulaireHandler:
     def envoyer_mail(self, commande):
         # Configuration du compte expéditeur
         expediteur = "mailautomatique.m.a.photo@gmail.com"
-        mot_de_passe = "dtfk psvo rkao kixh"  # Voir plus bas
+        mot_de_passe = "dtfk psvo rkao kixh"
         destinataire = commande["Email"]
 
         sujet = f"Confirmation de commande - ID {commande['ID']}"
@@ -336,7 +395,7 @@ class FormulaireHandler:
                     msgQ = QMessageBox()
                     msgQ.setIcon(QMessageBox.Information)
                     msgQ.setWindowTitle("Informations manquantes")
-                    msgQ.setText("Vous n'avez pas sélectionné de photos... Veuillez les choisir à l'aide de du bouton \"Sélectionner\". Ss vous voulez acheter un ou plusieurs tours, sélectionnez une photo du/des tours choisis et précisez votre choix dans l'espace \"remarque\".")
+                    msgQ.setText("Vous n'avez pas sélectionné de photos... Veuillez les choisir à l'aide de du bouton \"Sélectionner\". Si vous voulez acheter un ou plusieurs tours, sélectionnez une photo du/des tours choisis et précisez votre choix dans l'espace \"remarque\".")
                     msgQ.setWindowFlags(Qt.WindowStaysOnTopHint)
                     msgQ.exec()
                     return
@@ -376,7 +435,15 @@ class FormulaireHandler:
                         nom_fichier = os.path.basename(chemin_image)
                         destination = os.path.join(chemin_dossier_commande, nom_fichier)
 
-                        shutil.copy2(chemin_image, destination)
+                        global fili_clair_path
+
+                        image_pil = Image.open(chemin_image)
+                        image_pil = corriger_orientation(image_pil)
+                        if not fili_clair_path =="":
+                            image_pil = add_watermark(image_pil)
+                        image_pil.save(destination, quality=100)
+
+                        #shutil.copy2(chemin_image, destination)
                 except Exception as e:
                     msg = QMessageBox()
                     msg.setIcon(QMessageBox.Warning)
@@ -473,9 +540,11 @@ class FormulaireHandler:
 
 
 
-# ------------------------------
-# Fenêtre de mot de passe admin
-# ------------------------------
+#
+#
+#
+#
+#
 class PasswordDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -520,10 +589,11 @@ class PasswordDialog(QDialog):
             msg.setWindowFlags(Qt.WindowStaysOnTopHint)
             msg.exec()
 
-
-# ------------------------------
-# Fenêtre pour choisir le dossier racine
-# ------------------------------
+#
+#
+#
+#
+#
 class DossierDialog(QDialog):
     def __init__(self, parent=None, model=None, treeView=None):
         super().__init__(parent)
@@ -531,17 +601,22 @@ class DossierDialog(QDialog):
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
 
-        self.setWindowTitle("Changer le dossier racine")
-        self.setFixedSize(300, 200)
+        self.setWindowTitle("Espace Administrateur")
 
         self.model = model
         self.treeView = treeView
 
-
         self.ui.bouton_choisir.clicked.connect(self.choisir_nouveau_dossier)
         self.ui.bouton_save.clicked.connect(self.choisir_nouveau_dossier_data)
         self.ui.bouton_fermer.clicked.connect(self.fermer_application)
-        self.ui.restrict_mode.clicked.connect(self.deifne_restrict_mode)
+        self.ui.checkBox_restrict_mode.clicked.connect(self.define_restrict_mode)
+        self.ui.pushButton_fili_clair.clicked.connect(self.choisir_fili_clair)
+        self.ui.pushButton_fili_sombre.clicked.connect(self.choisir_fili_sombre)
+        self.ui.pushButton_create_fili.clicked.connect(self.open_create_fili)
+
+        global restrict_mode
+        if restrict_mode:
+            self.ui.checkBox_restrict_mode.setChecked(1)
 
     def choisir_nouveau_dossier(self):
         dialog = QFileDialog(self)
@@ -633,7 +708,6 @@ class DossierDialog(QDialog):
                 color: white;  /* Texte blanc au survol */
             }
         """)
-
 
         if dialog.exec():
             dossier = dialog.selectedFiles()[0]
@@ -740,13 +814,186 @@ class DossierDialog(QDialog):
             if dossier:
                 global data_save_folder
                 data_save_folder = dossier
+    def choisir_fili_clair(self):
+        dialog = QFileDialog(self)
+        dialog.setWindowTitle("Choisir un dossier pour gérer les commandes")
+        dialog.setDirectory("D:/")
+        dialog.setFileMode(QFileDialog.ExistingFile)
+        dialog.setNameFilter("Images PNG (*.png)")
+        #dialog.setOption(QFileDialog.DontUseNativeDialog, True)
+        dialog.setStyleSheet("""
+            QFileDialog {
+                background-color: #2e2e2e;  /* Fond sombre */
+                font-family: 'Segoe UI';
+                font-size: 14px;
+                color: white;  /* Texte blanc */
+                border: none;
+            }
+            QLabel {
+                color: white;  /* Texte blanc pour les labels */
+                font-weight: normal;
+                font-size: 14px;
+                background-color: #2e2e2e;
+            }
+            QPushButton {
+                background-color: #4CAF50;  /* Vert pour les boutons */
+                color: white;
+                border-radius: 6px;
+                padding: 6px 12px;
+                font-weight: semi-bold;
+            }
+            QPushButton:hover {
+                background-color: #45a049;  /* Vert foncé au survol */
+            }
+            QPushButton:pressed {
+                background-color: #388e3c;  /* Vert encore plus foncé quand pressé */
+            }
+            QLineEdit, QComboBox {
+                background-color: #333333;  /* Fond sombre pour les champs */
+                border: 1px solid #555555;
+                padding: 6px;
+                border-radius: 4px;
+                color: white;  /* Texte blanc dans les champs */
+            }
+            QTreeView, QListView {
+                background-color: #333333;  /* Fond sombre pour la liste des fichiers */
+                alternate-background-color: #444444;
+                color: white;  /* Texte blanc dans la liste */
+                show-decoration-selected: 1;
+                outline: none;
+            }
+            QHeaderView::section {
+                background-color: #444444;  /* En-têtes de colonnes foncées */
+                padding: 6px;
+                border: none;
+                font-weight: bold;
+                color: white;  /* Texte blanc pour les en-têtes */
+            }
+            QScrollBar:vertical, QScrollBar:horizontal {
+                background: #444444;  /* Fond sombre des barres de défilement */
+                border: none;
+                width: 10px;
+                margin: 0px;
+            }
+            QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+                background: #777777;  /* Barre de défilement grise */
+                border-radius: 4px;
+                min-height: 20px;
+            }
+            QScrollBar::add-line, QScrollBar::sub-line {
+                background: none;
+                border: none;
+            }
+            QTreeView::item:selected {
+                background-color: #0078D7;  /* Bleu pour la sélection */
+                color: white;  /* Texte blanc lors de la sélection */
+            }
+            QTreeView::item:hover {
+                background-color: #555555;  /* Gris foncé au survol */
+                color: white;  /* Texte blanc au survol */
+            }""")
 
-    def deifne_restrict_mode(self):
+        if dialog.exec():
+            chemin = dialog.selectedFiles()[0]
+            if chemin:
+                global fili_clair_path
+                fili_clair_path = chemin
+                self.ui.lineEdit_fili_clair.setText(fili_clair_path)
+
+    def choisir_fili_sombre(self):
+        dialog = QFileDialog(self)
+        dialog.setWindowTitle("Choisir un dossier pour gérer les commandes")
+        dialog.setDirectory("D:/")
+        dialog.setFileMode(QFileDialog.ExistingFile)
+        dialog.setNameFilter("Images PNG (*.png)")
+        #dialog.setOption(QFileDialog.DontUseNativeDialog, True)
+        dialog.setStyleSheet("""
+            QFileDialog {
+                background-color: #2e2e2e;  /* Fond sombre */
+                font-family: 'Segoe UI';
+                font-size: 14px;
+                color: white;  /* Texte blanc */
+                border: none;
+            }
+            QLabel {
+                color: white;  /* Texte blanc pour les labels */
+                font-weight: normal;
+                font-size: 14px;
+                background-color: #2e2e2e;
+            }
+            QPushButton {
+                background-color: #4CAF50;  /* Vert pour les boutons */
+                color: white;
+                border-radius: 6px;
+                padding: 6px 12px;
+                font-weight: semi-bold;
+            }
+            QPushButton:hover {
+                background-color: #45a049;  /* Vert foncé au survol */
+            }
+            QPushButton:pressed {
+                background-color: #388e3c;  /* Vert encore plus foncé quand pressé */
+            }
+            QLineEdit, QComboBox {
+                background-color: #333333;  /* Fond sombre pour les champs */
+                border: 1px solid #555555;
+                padding: 6px;
+                border-radius: 4px;
+                color: white;  /* Texte blanc dans les champs */
+            }
+            QTreeView, QListView {
+                background-color: #333333;  /* Fond sombre pour la liste des fichiers */
+                alternate-background-color: #444444;
+                color: white;  /* Texte blanc dans la liste */
+                show-decoration-selected: 1;
+                outline: none;
+            }
+            QHeaderView::section {
+                background-color: #444444;  /* En-têtes de colonnes foncées */
+                padding: 6px;
+                border: none;
+                font-weight: bold;
+                color: white;  /* Texte blanc pour les en-têtes */
+            }
+            QScrollBar:vertical, QScrollBar:horizontal {
+                background: #444444;  /* Fond sombre des barres de défilement */
+                border: none;
+                width: 10px;
+                margin: 0px;
+            }
+            QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+                background: #777777;  /* Barre de défilement grise */
+                border-radius: 4px;
+                min-height: 20px;
+            }
+            QScrollBar::add-line, QScrollBar::sub-line {
+                background: none;
+                border: none;
+            }
+            QTreeView::item:selected {
+                background-color: #0078D7;  /* Bleu pour la sélection */
+                color: white;  /* Texte blanc lors de la sélection */
+            }
+            QTreeView::item:hover {
+                background-color: #555555;  /* Gris foncé au survol */
+                color: white;  /* Texte blanc au survol */
+            }""")
+
+        if dialog.exec():
+            chemin = dialog.selectedFiles()[0]
+            if chemin:
+                global fili_sombre_path
+                fili_sombre_path = chemin
+                self.ui.lineEdit_fili_sombre.setText(fili_sombre_path)
+
+
+    def define_restrict_mode(self):
         global restrict_mode
-        restrict_mode = self.ui.restrict_mode.isChecked
-        print(f"etat :{restrict_mode}")
+        restrict_mode = self.ui.checkBox_restrict_mode.isChecked()
 
-
+    def open_create_fili(self):
+        fili_interface = Fili()
+        fili_interface.exec()
 
     def fermer_application(self):
         # Ferme l'application
@@ -781,6 +1028,114 @@ class DossierDialog(QDialog):
             QApplication.quit()
 
 
+#
+#
+#
+#
+#
+
+class Fili(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.ui = Ui_Fili()
+        self.ui.setupUi(self)
+        self.setWindowTitle("Création d'un filigrane")
+
+        # Connexions
+        self.ui.selectLogoButton.clicked.connect(self.select_logo)
+        self.ui.leftTextLineEdit.textChanged.connect(self.update_watermark_preview)
+        self.ui.rightTextLineEdit.textChanged.connect(self.update_watermark_preview)
+        self.ui.generateButton.clicked.connect(self.save_watermark)
+        self.ui.fontSizeSpinBox.valueChanged.connect(self.update_watermark_preview)
+        self.ui.leftTextXOffsetSlider.valueChanged.connect(self.update_watermark_preview)
+        self.ui.rightTextXOffsetSlider.valueChanged.connect(self.update_watermark_preview)
+        self.ui.textYOffsetSlider.valueChanged.connect(self.update_watermark_preview)
+
+        self.logo_path = ""
+
+    def select_logo(self):
+        file_name, _ = QFileDialog.getOpenFileName(self, "Choisir un logo", "", "Images (*.png *.jpg *.bmp)")
+        if file_name:
+            self.logo_path = file_name
+            self.ui.logoPathLabel.setText(file_name)
+            self.update_watermark_preview()
+
+    def update_watermark_preview(self):
+        if not self.logo_path:
+            return
+
+        left_text = self.ui.leftTextLineEdit.toPlainText()
+        right_text = self.ui.rightTextLineEdit.toPlainText()
+
+        pixmap = self.create_watermark_pixmap(left_text, right_text, self.logo_path)
+        self.ui.filigrane_label.setPixmap(pixmap)
+
+    def save_watermark(self):
+        if not self.logo_path:
+            self.ui.statusLabel.setText("Veuillez choisir un logo.")
+            return
+
+        left_text = self.ui.leftTextLineEdit.toPlainText()
+        right_text = self.ui.rightTextLineEdit.toPlainText()
+
+        output_path = "filigrane.png"
+        pixmap = self.create_watermark_pixmap(left_text, right_text, self.logo_path)
+        pixmap.save(output_path)
+        self.ui.statusLabel.setText(f"Filigrane généré : {output_path}")
+
+    def create_watermark_pixmap(self, left_text, right_text, logo_path):
+        width, height = 1200, 250
+        watermark = QPixmap(width, height)
+        watermark.fill(Qt.transparent)
+
+        painter = QPainter(watermark)
+        painter.setRenderHint(QPainter.Antialiasing)
+
+        # Logo
+        logo = QPixmap(logo_path)
+        if logo.isNull():
+            return watermark
+
+        logo_height = int(height * 0.8)
+        logo = logo.scaledToHeight(logo_height, Qt.SmoothTransformation)
+        logo_x = (width - logo.width()) // 2
+        logo_y = (height - logo.height()) // 2
+        painter.drawPixmap(logo_x, logo_y, logo)
+
+        # Texte
+        font_size = self.ui.fontSizeSpinBox.value()
+        font = QFont("Arial", font_size)
+        painter.setFont(font)
+        painter.setPen(QColor(255, 255, 255))
+
+        # Offsets
+        x_offset_left = self.ui.leftTextXOffsetSlider.value()
+        x_offset_right = self.ui.rightTextXOffsetSlider.value()
+        y_offset = self.ui.textYOffsetSlider.value()
+
+        # Texte à gauche
+        left_rect = QRect(
+            20 + x_offset_left,
+            y_offset,
+            (width // 2) - logo.width() // 2 - 40,
+            height
+        )
+        painter.drawText(left_rect, Qt.AlignVCenter | Qt.AlignLeft | Qt.TextWordWrap, left_text)
+
+        # Texte à droite
+        right_rect = QRect(
+            (width // 2) + logo.width() // 2 + 20 + x_offset_right,
+            y_offset,
+            (width // 2) - logo.width() // 2 - 40,
+            height
+        )
+        painter.drawText(right_rect, Qt.AlignVCenter | Qt.AlignRight | Qt.TextWordWrap, right_text)
+
+
+        painter.end()
+        return watermark
+
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -796,6 +1151,8 @@ class MainWindow(QMainWindow):
         menu_admin = self.menuBar().addMenu("Admin")
         action_choisir_dossier = menu_admin.addAction("Espace administrateur")
         action_choisir_dossier.triggered.connect(self.ouvrir_dialogue_dossier)
+        action_update_window = menu_admin.addAction("Mise à jour Admin")
+        action_update_window.triggered.connect(self.maj_window)
 
         # Liste des chemins des images sélectionnées
         self.chemin_images = []
@@ -823,6 +1180,7 @@ class MainWindow(QMainWindow):
         self.ui.listWidgetPhotos.doubleClicked.connect(self.afficher_image_depuis_liste)
         self.ui.pushButton_refresh.clicked.connect(self.rafraichir_dossier)
 
+
         image = QImage("_internal\\ressources\\M.A.PHOTO.png")
         pixmap = QPixmap.fromImage(image)
         pixmap = pixmap.scaledToHeight(self.ui.label_logo.height(), Qt.SmoothTransformation)
@@ -832,10 +1190,8 @@ class MainWindow(QMainWindow):
 
 
         self.formulaire_handler = FormulaireHandler(self.ui)
-
-        #self.setWindowFlags(Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
-        #self.showFullScreen()
         self.show()
+
     def rounded_pixmap(self, pixmap, radius):
         size = pixmap.size()
         # Crée un QPixmap transparent pour le résultat
@@ -852,7 +1208,7 @@ class MainWindow(QMainWindow):
         return rounded
 
     def closeEvent(self, event):
-        if event.spontaneous():
+        if event.spontaneous() and restrict_mode==1:
             event.ignore()
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Information)
@@ -861,8 +1217,12 @@ class MainWindow(QMainWindow):
             msg.setWindowFlags(Qt.WindowStaysOnTopHint)
             msg.exec()
         else:
+            try:
+                shutil.rmtree(self.dossier_temporaire)
+            except Exception as e:
+                print("Erreur lors du nettoyage du dossier temporaire :", e)
             event.accept()
-        event.accept()
+
 
     def afficher_image(self, index):
         if self.model.isDir(index):
@@ -909,17 +1269,24 @@ class MainWindow(QMainWindow):
                                                         QPushButton:selected{background-color: rgb(100,101,150);}""")
 
     def afficher_image_depuis_chemin(self, chemin_image):
-        image = QImage(chemin_image)
-        if image.isNull():
+        global fili_clair_path
+
+        try:
+            image_pil = Image.open(chemin_image)
+            image_pil = corriger_orientation(image_pil)
+            if not fili_clair_path =="":
+                image_pil = add_watermark(image_pil)
+            image_qt = pil_to_qimage(image_pil)
+        except Exception as e:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Warning)
             msg.setWindowTitle("Erreur")
-            msg.setText(f"Impossible de charger l'image : {chemin_image}")
+            msg.setText(f"Impossible de charger l'image : {chemin_image}\n{e}")
             msg.setWindowFlags(Qt.WindowStaysOnTopHint)
             msg.exec()
             return
 
-        pixmap = QPixmap.fromImage(image)
+        pixmap = QPixmap.fromImage(image_qt)
         label_size = self.ui.labelImage.size()
         if label_size.width() == 0 or label_size.height() == 0:
             label_size = QSize(400, 400)
@@ -951,6 +1318,12 @@ class MainWindow(QMainWindow):
             self.ui.labelNomImage.setText(os.path.basename(self.chemin_images[self.index_image_courante]))
             self.update_button_color()
 
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Right:
+            self.afficher_suivante()
+        if event.key() == Qt.Key_Left:
+            self.afficher_precedente()
+
     def afficher_precedente(self):
         if self.index_image_courante > 0:
             self.index_image_courante -= 1
@@ -960,7 +1333,7 @@ class MainWindow(QMainWindow):
 
     def toggle_selection(self):
         if self.index_image_courante == -1:
-            return
+            return        
 
         chemin_image = self.chemin_images[self.index_image_courante]
 
@@ -1025,13 +1398,33 @@ class MainWindow(QMainWindow):
 
 
     def ouvrir_dialogue_dossier(self):
-        # Fenêtre de mot de passe
-        dialog = PasswordDialog(self)
-        if dialog.exec() and dialog.password_valid:
+        if restrict_mode :
+            # Fenêtre de mot de passe
+            dialog = PasswordDialog(self)
+            if dialog.exec() and dialog.password_valid:
+                dossier_dialog = DossierDialog(self, model=self.model, treeView=self.ui.treeView)
+                dossier_dialog.exec()
+        else :
             dossier_dialog = DossierDialog(self, model=self.model, treeView=self.ui.treeView)
             dossier_dialog.exec()
 
+    def maj_window(self):
+        if restrict_mode:
+            self.setWindowFlags(Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+            self.showFullScreen()
+            self.show()
+        else:
+            self.setWindowFlags(Qt.Window & ~Qt.FramelessWindowHint & ~Qt.WindowStaysOnTopHint)
+            self.showNormal()
 
+        self.show()
+
+
+#
+#
+#
+#
+#
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWindow()

@@ -1,0 +1,27 @@
+# Fichiers Python compilés
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Dossiers de l'environnement virtuel
+venv/
+env/
+*.env
+.Python
+
+# Fichiers de configuration d'IDE (PyCharm, VSCode, etc.)
+.vscode/
+.idea/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Images ou fichiers générés
+*.png
+*.jpg
+*.bmp
+
+# Fichiers UI compilés
+ui_*.py
