@@ -21,7 +21,7 @@ from datetime import datetime
 
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QFileSystemModel, QListWidgetItem, QFileDialog,
-    QDialog, QWidget, QVBoxLayout, QLineEdit, QLabel, QPushButton, QMessageBox,QInputDialog
+    QDialog, QVBoxLayout, QLineEdit, QLabel, QPushButton, QMessageBox,QInputDialog
 )
 from PySide6.QtGui import QPixmap, QImage, QPainter, QPainterPath, QIcon, QFont, QColor
 from PySide6.QtCore import Qt, QSize, QRect
@@ -1217,10 +1217,6 @@ class MainWindow(QMainWindow):
             msg.setWindowFlags(Qt.WindowStaysOnTopHint)
             msg.exec()
         else:
-            try:
-                shutil.rmtree(self.dossier_temporaire)
-            except Exception as e:
-                print("Erreur lors du nettoyage du dossier temporaire :", e)
             event.accept()
 
 
