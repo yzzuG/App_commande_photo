@@ -11,6 +11,7 @@ env/
 .Python
 
 build/
+dist/
 
 # Fichiers de configuration d'IDE (PyCharm, VSCode, etc.)
 .vscode/
