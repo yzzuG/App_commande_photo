@@ -61,14 +61,14 @@ class Ui_Dialog(object):
 "                                            QPushButton:selected{background-color: rgb(100,101,150);}")
         self.lineEdit_fili_clair = QLineEdit(Dialog)
         self.lineEdit_fili_clair.setObjectName(u"lineEdit_fili_clair")
-        self.lineEdit_fili_clair.setGeometry(QRect(580, 40, 321, 24))
+        self.lineEdit_fili_clair.setGeometry(QRect(530, 40, 371, 24))
         self.lineEdit_fili_clair.setStyleSheet(u"background-color:rgb(41,42,43);\n"
 "border-radius: 5px;\n"
 "color: rgb(255,255,255);\n"
 "border:none;")
         self.lineEdit_fili_sombre = QLineEdit(Dialog)
         self.lineEdit_fili_sombre.setObjectName(u"lineEdit_fili_sombre")
-        self.lineEdit_fili_sombre.setGeometry(QRect(580, 100, 321, 24))
+        self.lineEdit_fili_sombre.setGeometry(QRect(530, 100, 371, 24))
         self.lineEdit_fili_sombre.setStyleSheet(u"background-color:rgb(41,42,43);\n"
 "border-radius: 5px;\n"
 "color: rgb(255,255,255);\n"
@@ -95,10 +95,10 @@ class Ui_Dialog(object):
 "                                            QPushButton:selected{background-color: rgb(100,101,150);}")
         self.label = QLabel(Dialog)
         self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(580, 20, 101, 16))
+        self.label.setGeometry(QRect(530, 20, 101, 16))
         self.label_2 = QLabel(Dialog)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(580, 80, 101, 16))
+        self.label_2.setGeometry(QRect(530, 80, 101, 16))
         self.pushButton_create_fili = QPushButton(Dialog)
         self.pushButton_create_fili.setObjectName(u"pushButton_create_fili")
         self.pushButton_create_fili.setGeometry(QRect(850, 560, 131, 24))
@@ -123,8 +123,8 @@ class Ui_Dialog(object):
         self.bouton_fermer.setText(QCoreApplication.translate("Dialog", u"Fermer l'interface", None))
         self.pushButton_fili_clair.setText(QCoreApplication.translate("Dialog", u"Parcourir", None))
         self.pushButton_fili_sombre.setText(QCoreApplication.translate("Dialog", u"Parcourir", None))
-        self.label.setText(QCoreApplication.translate("Dialog", u"Filigrane clair", None))
-        self.label_2.setText(QCoreApplication.translate("Dialog", u"Filigrane sombre", None))
+        self.label.setText(QCoreApplication.translate("Dialog", u"Filigrane clair :", None))
+        self.label_2.setText(QCoreApplication.translate("Dialog", u"Filigrane sombre :", None))
         self.pushButton_create_fili.setText(QCoreApplication.translate("Dialog", u"Cr\u00e9er un filigrane", None))
     # retranslateUi
 

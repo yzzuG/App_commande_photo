@@ -438,16 +438,16 @@ class Ui_MainWindow(object):
 "border-radius : 5px;\n"
 "background-color:rgb(101,102,103);color:#FFFFFF;")
         self.lineEdit_photos.setReadOnly(True)
-        self.lineEdit_photos_2 = QLineEdit(self.frame_formulaire)
-        self.lineEdit_photos_2.setObjectName(u"lineEdit_photos_2")
-        self.lineEdit_photos_2.setGeometry(QRect(270, 410, 111, 31))
-        self.lineEdit_photos_2.setStyleSheet(u"border:none;\n"
+        self.lineEdit_prix = QLineEdit(self.frame_formulaire)
+        self.lineEdit_prix.setObjectName(u"lineEdit_prix")
+        self.lineEdit_prix.setGeometry(QRect(270, 410, 111, 31))
+        self.lineEdit_prix.setStyleSheet(u"border:none;\n"
 "border-radius : 5px;\n"
 "background-color:rgb(101,102,103);color:#FFFFFF;")
-        self.lineEdit_photos_2.setReadOnly(True)
-        self.label_paiement_2 = QLabel(self.frame_formulaire)
-        self.label_paiement_2.setObjectName(u"label_paiement_2")
-        self.label_paiement_2.setGeometry(QRect(270, 390, 71, 20))
+        self.lineEdit_prix.setReadOnly(False)
+        self.label_prix = QLabel(self.frame_formulaire)
+        self.label_prix.setObjectName(u"label_prix")
+        self.label_prix.setGeometry(QRect(270, 390, 71, 20))
 
         self.gridLayout.addWidget(self.frame_formulaire, 0, 3, 2, 1)
 
@@ -821,7 +821,7 @@ class Ui_MainWindow(object):
         self.label_id.setText(QCoreApplication.translate("MainWindow", u"ID de commande :", None))
         self.button_quitter_formulaire.setText(QCoreApplication.translate("MainWindow", u"Abandonner", None))
         self.label_photos.setText(QCoreApplication.translate("MainWindow", u"Photos choisis : ", None))
-        self.label_paiement_2.setText(QCoreApplication.translate("MainWindow", u"Prix :", None))
+        self.label_prix.setText(QCoreApplication.translate("MainWindow", u"Tarif :", None))
         self.label_logo.setText("")
         self.labelImage.setText(QCoreApplication.translate("MainWindow", u"Selectionner une photo", None))
         self.labelNomImage.setText(QCoreApplication.translate("MainWindow", u"Nom de la photo", None))

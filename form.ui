@@ -838,7 +838,7 @@ background-color:rgb(101,102,103);color:#FFFFFF;</string>
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QLineEdit" name="lineEdit_photos_2">
+      <widget class="QLineEdit" name="lineEdit_prix">
        <property name="geometry">
         <rect>
          <x>270</x>
@@ -853,10 +853,10 @@ border-radius : 5px;
 background-color:rgb(101,102,103);color:#FFFFFF;</string>
        </property>
        <property name="readOnly">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
-      <widget class="QLabel" name="label_paiement_2">
+      <widget class="QLabel" name="label_prix">
        <property name="geometry">
         <rect>
          <x>270</x>
@@ -866,7 +866,7 @@ background-color:rgb(101,102,103);color:#FFFFFF;</string>
         </rect>
        </property>
        <property name="text">
-        <string>Prix :</string>
+        <string>Tarif :</string>
        </property>
       </widget>
      </widget>

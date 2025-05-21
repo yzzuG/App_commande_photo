@@ -4,7 +4,7 @@
 # pyside6-uic form.ui -o ui_form.p
 # pyside6-uic dialog.ui -o ui_dialog.p
 # pyside6-uic fili.ui -o ui_fili.p
-# pyinstaller --noconfirm --windowed --icon=icone.ico --add-data=M.A.PHOTO.png:ressources -n MA_Photo_commande_V1_2 mainwindow.py
+# pyinstaller --noconfirm --windowed --icon=icone.ico --add-data=M.A.PHOTO.png:ressources -n MA_Photo_commande_V2_0 mainwindow.py
 
 
 
@@ -109,6 +109,7 @@ class FormulaireHandler:
         self.ui.label_telephone.setHidden(True);
         self.ui.label_photos.setHidden(True);
         self.ui.label_paiement.setHidden(True);
+        self.ui.label_prix.setHidden(True);
         self.ui.label_remarque.setHidden(True);
         self.ui.lineEdit_id.setHidden(True);
         self.ui.lineEdit_nom.setHidden(True);
@@ -116,6 +117,7 @@ class FormulaireHandler:
         self.ui.lineEdit_email.setHidden(True);
         self.ui.lineEdit_telephone.setHidden(True);
         self.ui.lineEdit_photos.setHidden(True);
+        self.ui.lineEdit_prix.setHidden(True);
         self.ui.comboBox_paiement.setHidden(True);
         self.ui.textEdit_remarque.setHidden(True);
         self.ui.button_sauvegarder_formulaire.setHidden(True);
@@ -133,6 +135,7 @@ class FormulaireHandler:
         self.ui.label_telephone.setHidden(False);
         self.ui.label_photos.setHidden(False);
         self.ui.label_paiement.setHidden(False);
+        self.ui.label_prix.setHidden(False);
         self.ui.label_remarque.setHidden(False);
         self.ui.lineEdit_id.setHidden(False);
         self.ui.lineEdit_nom.setHidden(False);
@@ -142,6 +145,7 @@ class FormulaireHandler:
         self.ui.comboBox_paiement.setHidden(False);
         self.ui.lineEdit_photos.setHidden(False);
         self.ui.textEdit_remarque.setHidden(False);
+        self.ui.lineEdit_prix.setHidden(False);
         self.ui.button_sauvegarder_formulaire.setHidden(False);
         self.ui.button_quitter_formulaire.setHidden(False);
         self.ui.button_selectionner.setHidden(False)
@@ -187,6 +191,7 @@ class FormulaireHandler:
             self.ui.label_telephone.setHidden(False);
             self.ui.label_photos.setHidden(False);
             self.ui.label_paiement.setHidden(False);
+            self.ui.label_prix.setHidden(False);
             self.ui.label_remarque.setHidden(False);
             self.ui.lineEdit_id.setHidden(False);
             self.ui.lineEdit_nom.setHidden(False);
@@ -196,6 +201,7 @@ class FormulaireHandler:
             self.ui.lineEdit_photos.setHidden(False);
             self.ui.comboBox_paiement.setHidden(False);
             self.ui.textEdit_remarque.setHidden(False);
+            self.ui.lineEdit_prix.setHidden(False);
             self.ui.button_sauvegarder_formulaire.setHidden(False);
             self.ui.button_quitter_formulaire.setHidden(False);
             self.ui.button_selectionner.setHidden(False)
@@ -285,6 +291,7 @@ class FormulaireHandler:
             self.ui.lineEdit_telephone.setText(telephone)
             self.ui.lineEdit_photos.setText(str(row.get("Photos", "")))
             self.ui.comboBox_paiement.setCurrentText(str(row.get("Paiement", "")))
+            self.ui.lineEdit_prix.setText(str(row.get("Tarif", "")))
             self.ui.textEdit_remarque.setPlainText(str(row.get("Remarque", "")))
 
             msg = QMessageBox()
@@ -369,7 +376,7 @@ class FormulaireHandler:
                 if os.path.exists(fichier):
                     df = pd.read_excel(fichier)
                 else:
-                    df = pd.DataFrame(columns=["ID", "Nom", "Prénom", "Email", "Téléphone", "Photos", "Paiement", "Remarque"])
+                    df = pd.DataFrame(columns=["ID", "Nom", "Prénom", "Email", "Téléphone", "Photos", "Paiement", "Tarif", "Remarque"])
 
                 # Ajouter la nouvelle ligne
                 nouvelle_ligne = {
@@ -380,10 +387,11 @@ class FormulaireHandler:
                     "Téléphone": "'+33"+self.ui.lineEdit_telephone.text(),
                     "Photos": self.ui.lineEdit_photos.text(),
                     "Paiement": self.ui.comboBox_paiement.currentText(),
+                    "Tarif": self.ui.lineEdit_prix.text(),
                     "Remarque": self.ui.textEdit_remarque.toPlainText()
                 }
 
-                if nouvelle_ligne['Nom'] == "" or nouvelle_ligne['Prénom'] == "" or nouvelle_ligne['Email'] == "" or nouvelle_ligne['Email'] == "" or nouvelle_ligne['Téléphone'] == "" or nouvelle_ligne['Paiement'] == "Choisir":
+                if nouvelle_ligne['Nom'] == "" or nouvelle_ligne['Prénom'] == "" or nouvelle_ligne['Email'] == "" or nouvelle_ligne['Email'] == "" or nouvelle_ligne['Téléphone'] == "" or nouvelle_ligne['Paiement'] == "Choisir" or nouvelle_ligne['Tarif']=="":
                     msgQ = QMessageBox()
                     msgQ.setIcon(QMessageBox.Information)
                     msgQ.setWindowTitle("Informations manquantes")
@@ -479,6 +487,7 @@ class FormulaireHandler:
                 self.ui.label_telephone.setHidden(True);
                 self.ui.label_photos.setHidden(True);
                 self.ui.label_paiement.setHidden(True);
+                self.ui.label_prix.setHidden(True);
                 self.ui.label_remarque.setHidden(True);
                 self.ui.lineEdit_id.setHidden(True);
                 self.ui.lineEdit_nom.setHidden(True);
@@ -488,6 +497,7 @@ class FormulaireHandler:
                 self.ui.lineEdit_photos.setHidden(True);
                 self.ui.comboBox_paiement.setHidden(True);
                 self.ui.textEdit_remarque.setHidden(True);
+                self.ui.lineEdit_prix.setHidden(True);
                 self.ui.button_sauvegarder_formulaire.setHidden(True);
                 self.ui.button_quitter_formulaire.setHidden(True);
                 self.ui.button_selectionner.setHidden(True)
@@ -510,6 +520,7 @@ class FormulaireHandler:
         self.ui.label_telephone.setHidden(True);
         self.ui.label_photos.setHidden(True);
         self.ui.label_paiement.setHidden(True);
+        self.ui.label_prix.setHidden(True);
         self.ui.label_remarque.setHidden(True);
         self.ui.lineEdit_id.setHidden(True);
         self.ui.lineEdit_nom.setHidden(True);
@@ -519,6 +530,7 @@ class FormulaireHandler:
         self.ui.lineEdit_photos.setHidden(True);
         self.ui.comboBox_paiement.setHidden(True);
         self.ui.textEdit_remarque.setHidden(True);
+        self.ui.lineEdit_prix.setHidden(True);
         self.ui.button_sauvegarder_formulaire.setHidden(True);
         self.ui.button_quitter_formulaire.setHidden(True);
         self.ui.button_selectionner.setHidden(True)
@@ -532,6 +544,7 @@ class FormulaireHandler:
         self.ui.lineEdit_email.clear()
         self.ui.lineEdit_telephone.clear()
         self.ui.lineEdit_photos.clear()
+        self.ui.lineEdit_prix.clear()
         self.ui.comboBox_paiement.setCurrentIndex(0)
         self.ui.textEdit_remarque.clear()
 
@@ -1049,7 +1062,7 @@ class Fili(QDialog):
         self.ui.fontSizeSpinBox.valueChanged.connect(self.update_watermark_preview)
         self.ui.leftTextXOffsetSlider.valueChanged.connect(self.update_watermark_preview)
         self.ui.rightTextXOffsetSlider.valueChanged.connect(self.update_watermark_preview)
-        self.ui.textYOffsetSlider.valueChanged.connect(self.update_watermark_preview)
+        #self.ui.textYOffsetSlider.valueChanged.connect(self.update_watermark_preview)
 
         self.logo_path = ""
 
@@ -1078,10 +1091,27 @@ class Fili(QDialog):
         left_text = self.ui.leftTextLineEdit.toPlainText()
         right_text = self.ui.rightTextLineEdit.toPlainText()
 
-        output_path = "filigrane.png"
+        # Ouvrir une boîte de dialogue pour choisir le chemin de sauvegarde
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog  # Optionnel selon ta plateforme
+        file_path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Enregistrer le filigrane",
+            "filigrane.png",  # Nom par défaut
+            "Images PNG (*.png);;Toutes les fichiers (*)",
+            options=options
+        )
+
+        # Si l'utilisateur annule, on ne fait rien
+        if not file_path:
+            return
+
+        # Créer et sauvegarder le filigrane
         pixmap = self.create_watermark_pixmap(left_text, right_text, self.logo_path)
-        pixmap.save(output_path)
-        self.ui.statusLabel.setText(f"Filigrane généré : {output_path}")
+        if pixmap.save(file_path):
+            self.ui.filigrane_label.setText(f"Filigrane généré : {file_path}")
+        else:
+            self.ui.statusLabel.setText("Erreur lors de la sauvegarde du filigrane.")
 
     def create_watermark_pixmap(self, left_text, right_text, logo_path):
         width, height = 1200, 250
@@ -1111,7 +1141,8 @@ class Fili(QDialog):
         # Offsets
         x_offset_left = self.ui.leftTextXOffsetSlider.value()
         x_offset_right = self.ui.rightTextXOffsetSlider.value()
-        y_offset = self.ui.textYOffsetSlider.value()
+        y_offset = 0
+        print(f"x_offset_left : {x_offset_left}, x_offset_right : {x_offset_right}")
 
         # Texte à gauche
         left_rect = QRect(
@@ -1170,7 +1201,11 @@ class MainWindow(QMainWindow):
         self.ui.treeView.setColumnHidden(1, True)  # Taille
         self.ui.treeView.setColumnHidden(2, True)  # Type
         self.ui.treeView.setColumnHidden(3, True)  # Type
+
         self.ui.treeView.setColumnWidth(0, 280)
+
+        self.ui.treeView.setSortingEnabled(True)
+        self.ui.treeView.sortByColumn(3, Qt.AscendingOrder)
 
         # Signaux
         self.ui.treeView.doubleClicked.connect(self.afficher_image)
