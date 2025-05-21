@@ -10,6 +10,8 @@ env/
 *.env
 .Python
 
+build/
+
 # Fichiers de configuration d'IDE (PyCharm, VSCode, etc.)
 .vscode/
 .idea/
