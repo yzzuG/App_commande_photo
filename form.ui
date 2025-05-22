@@ -812,7 +812,7 @@ QPushButton:selected{
         <rect>
          <x>20</x>
          <y>320</y>
-         <width>361</width>
+         <width>231</width>
          <height>16</height>
         </rect>
        </property>
@@ -825,7 +825,7 @@ QPushButton:selected{
         <rect>
          <x>20</x>
          <y>340</y>
-         <width>361</width>
+         <width>231</width>
          <height>31</height>
         </rect>
        </property>
@@ -867,6 +867,73 @@ background-color:rgb(101,102,103);color:#FFFFFF;</string>
        </property>
        <property name="text">
         <string>Tarif :</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="comboBox_type">
+       <property name="geometry">
+        <rect>
+         <x>270</x>
+         <y>340</y>
+         <width>111</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">/* COMBO BOX */
+QComboBox {
+	border: none;
+    padding: 1px 20px 1px 3px;
+    background-color: rgb(101,102,103);
+	border-radius: 5px;
+	color:#FFFFFF;
+}
+
+QComboBox:hover { 
+	background-color: rgb(101,102,150);
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+    border-left-width: 1px;
+    border-left-color: darkgray;
+    border-left-style: solid; /* just a single line */
+    border-top-right-radius: 3px; /* same radius as the QComboBox */
+    border-bottom-right-radius: 3px;
+}
+
+QComboBox:selected{
+	background-color: rgb(101,102,150);
+}
+
+QComboBox QAbstractItemView{
+    border: 2px solid rgb(73,74,75);
+    selection-background-color: rgb(101,102,103);
+}</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Photo</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Tour</string>
+        </property>
+       </item>
+      </widget>
+      <widget class="QLabel" name="label_type">
+       <property name="geometry">
+        <rect>
+         <x>270</x>
+         <y>320</y>
+         <width>111</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Type :</string>
        </property>
       </widget>
      </widget>

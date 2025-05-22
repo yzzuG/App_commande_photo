@@ -430,10 +430,10 @@ class Ui_MainWindow(object):
         self.button_quitter_formulaire.setLocale(QLocale(QLocale.French, QLocale.France))
         self.label_photos = QLabel(self.frame_formulaire)
         self.label_photos.setObjectName(u"label_photos")
-        self.label_photos.setGeometry(QRect(20, 320, 361, 16))
+        self.label_photos.setGeometry(QRect(20, 320, 231, 16))
         self.lineEdit_photos = QLineEdit(self.frame_formulaire)
         self.lineEdit_photos.setObjectName(u"lineEdit_photos")
-        self.lineEdit_photos.setGeometry(QRect(20, 340, 361, 31))
+        self.lineEdit_photos.setGeometry(QRect(20, 340, 231, 31))
         self.lineEdit_photos.setStyleSheet(u"border:none;\n"
 "border-radius : 5px;\n"
 "background-color:rgb(101,102,103);color:#FFFFFF;")
@@ -448,6 +448,46 @@ class Ui_MainWindow(object):
         self.label_prix = QLabel(self.frame_formulaire)
         self.label_prix.setObjectName(u"label_prix")
         self.label_prix.setGeometry(QRect(270, 390, 71, 20))
+        self.comboBox_type = QComboBox(self.frame_formulaire)
+        self.comboBox_type.addItem("")
+        self.comboBox_type.addItem("")
+        self.comboBox_type.setObjectName(u"comboBox_type")
+        self.comboBox_type.setGeometry(QRect(270, 340, 111, 31))
+        self.comboBox_type.setStyleSheet(u"/* COMBO BOX */\n"
+"QComboBox {\n"
+"	border: none;\n"
+"    padding: 1px 20px 1px 3px;\n"
+"    background-color: rgb(101,102,103);\n"
+"	border-radius: 5px;\n"
+"	color:#FFFFFF;\n"
+"}\n"
+"\n"
+"QComboBox:hover { \n"
+"	background-color: rgb(101,102,150);\n"
+"}\n"
+"\n"
+"QComboBox::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    width: 15px;\n"
+"    border-left-width: 1px;\n"
+"    border-left-color: darkgray;\n"
+"    border-left-style: solid; /* just a single line */\n"
+"    border-top-right-radius: 3px; /* same radius as the QComboBox */\n"
+"    border-bottom-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QComboBox:selected{\n"
+"	background-color: rgb(101,102,150);\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView{\n"
+"    border: 2px solid rgb(73,74,75);\n"
+"    selection-background-color: rgb(101,102,103);\n"
+"}")
+        self.label_type = QLabel(self.frame_formulaire)
+        self.label_type.setObjectName(u"label_type")
+        self.label_type.setGeometry(QRect(270, 320, 111, 16))
 
         self.gridLayout.addWidget(self.frame_formulaire, 0, 3, 2, 1)
 
@@ -822,6 +862,10 @@ class Ui_MainWindow(object):
         self.button_quitter_formulaire.setText(QCoreApplication.translate("MainWindow", u"Abandonner", None))
         self.label_photos.setText(QCoreApplication.translate("MainWindow", u"Photos choisis : ", None))
         self.label_prix.setText(QCoreApplication.translate("MainWindow", u"Tarif :", None))
+        self.comboBox_type.setItemText(0, QCoreApplication.translate("MainWindow", u"Photo", None))
+        self.comboBox_type.setItemText(1, QCoreApplication.translate("MainWindow", u"Tour", None))
+
+        self.label_type.setText(QCoreApplication.translate("MainWindow", u"Type :", None))
         self.label_logo.setText("")
         self.labelImage.setText(QCoreApplication.translate("MainWindow", u"Selectionner une photo", None))
         self.labelNomImage.setText(QCoreApplication.translate("MainWindow", u"Nom de la photo", None))

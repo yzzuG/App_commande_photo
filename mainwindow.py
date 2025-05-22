@@ -41,6 +41,23 @@ fili_clair_path = ""
 fili_sombre_path = ""
 restrict_mode = 0
 
+calcul_tarif_auto = 0
+tarif_multiple_1 = 0
+tarif_multiple_2 = 0
+tarif_multiple_3 = 0
+tarif_multiple_4 = 0
+tarif_multiple_tour_5 = 0
+tarif_multiple_tour_6 = 0
+
+tarif_1 = 0
+tarif_2 = 0
+tarif_3 = 0
+tarif_4 = 0
+tarif_5 = 0
+tarif_6 = 0
+
+tarif_supp = 0
+
 
 def corriger_orientation(image_pil):
     try:
@@ -111,6 +128,8 @@ class FormulaireHandler:
         self.ui.label_paiement.setHidden(True);
         self.ui.label_prix.setHidden(True);
         self.ui.label_remarque.setHidden(True);
+        self.ui.label_type.setHidden(True);
+        self.ui.comboBox_type.setHidden(True);
         self.ui.lineEdit_id.setHidden(True);
         self.ui.lineEdit_nom.setHidden(True);
         self.ui.lineEdit_prenom.setHidden(True);
@@ -127,6 +146,7 @@ class FormulaireHandler:
         self.ui.button_charger_formulaire.setHidden(False)
 
 
+
     def nouveau_formulaire(self):
         self.ui.label_id.setHidden(False);
         self.ui.label_nom.setHidden(False);
@@ -137,6 +157,8 @@ class FormulaireHandler:
         self.ui.label_paiement.setHidden(False);
         self.ui.label_prix.setHidden(False);
         self.ui.label_remarque.setHidden(False);
+        self.ui.label_type.setHidden(False);
+        self.ui.comboBox_type.setHidden(False);
         self.ui.lineEdit_id.setHidden(False);
         self.ui.lineEdit_nom.setHidden(False);
         self.ui.lineEdit_prenom.setHidden(False);
@@ -193,6 +215,8 @@ class FormulaireHandler:
             self.ui.label_paiement.setHidden(False);
             self.ui.label_prix.setHidden(False);
             self.ui.label_remarque.setHidden(False);
+            self.ui.label_type.setHidden(False);
+            self.ui.comboBox_type.setHidden(False);
             self.ui.lineEdit_id.setHidden(False);
             self.ui.lineEdit_nom.setHidden(False);
             self.ui.lineEdit_prenom.setHidden(False);
@@ -489,6 +513,8 @@ class FormulaireHandler:
                 self.ui.label_paiement.setHidden(True);
                 self.ui.label_prix.setHidden(True);
                 self.ui.label_remarque.setHidden(True);
+                self.ui.label_type.setHidden(True);
+                self.ui.comboBox_type.setHidden(True);
                 self.ui.lineEdit_id.setHidden(True);
                 self.ui.lineEdit_nom.setHidden(True);
                 self.ui.lineEdit_prenom.setHidden(True);
@@ -522,6 +548,8 @@ class FormulaireHandler:
         self.ui.label_paiement.setHidden(True);
         self.ui.label_prix.setHidden(True);
         self.ui.label_remarque.setHidden(True);
+        self.ui.label_type.setHidden(True);
+        self.ui.comboBox_type.setHidden(True);
         self.ui.lineEdit_id.setHidden(True);
         self.ui.lineEdit_nom.setHidden(True);
         self.ui.lineEdit_prenom.setHidden(True);
@@ -626,6 +654,45 @@ class DossierDialog(QDialog):
         self.ui.pushButton_fili_clair.clicked.connect(self.choisir_fili_clair)
         self.ui.pushButton_fili_sombre.clicked.connect(self.choisir_fili_sombre)
         self.ui.pushButton_create_fili.clicked.connect(self.open_create_fili)
+        self.ui.Tarifs_auto_checkbox.clicked.connect(self.activer_calcul_tarif)
+        self.ui.tarif_checkbox_1.clicked.connect(self.set_tarif)
+        self.ui.tarif_checkbox_2.clicked.connect(self.set_tarif)
+        self.ui.tarif_checkbox_3.clicked.connect(self.set_tarif)
+        self.ui.tarif_checkbox_4.clicked.connect(self.set_tarif)
+        self.ui.tarif_checkbox_5.clicked.connect(self.set_tarif)
+        self.ui.tarif_checkbox_6.clicked.connect(self.set_tarif)
+        self.ui.multiple_tarifs_1.valueChanged.connect(self.set_tarif)
+        self.ui.multiple_tarifs_2.valueChanged.connect(self.set_tarif)
+        self.ui.multiple_tarifs_3.valueChanged.connect(self.set_tarif)
+        self.ui.multiple_tarifs_4.valueChanged.connect(self.set_tarif)
+        self.ui.multiple_tarifs_5.valueChanged.connect(self.set_tarif)
+        self.ui.multiple_tarifs_6.valueChanged.connect(self.set_tarif)
+        self.ui.tarif_1.valueChanged.connect(self.set_tarif)
+        self.ui.tarif_2.valueChanged.connect(self.set_tarif)
+        self.ui.tarif_3.valueChanged.connect(self.set_tarif)
+        self.ui.tarif_4.valueChanged.connect(self.set_tarif)
+        self.ui.tarif_5.valueChanged.connect(self.set_tarif)
+        self.ui.tarif_6.valueChanged.connect(self.set_tarif)
+
+        self.ui.tarif_checkbox_1.setEnabled(0)
+        self.ui.tarif_checkbox_2.setEnabled(0)
+        self.ui.tarif_checkbox_3.setEnabled(0)
+        self.ui.tarif_checkbox_4.setEnabled(0)
+        self.ui.tarif_checkbox_5.setEnabled(0)
+        self.ui.tarif_checkbox_6.setEnabled(0)
+        self.ui.tarif_1.setEnabled(0)
+        self.ui.tarif_2.setEnabled(0)
+        self.ui.tarif_3.setEnabled(0)
+        self.ui.tarif_4.setEnabled(0)
+        self.ui.tarif_5.setEnabled(0)
+        self.ui.tarif_6.setEnabled(0)
+        self.ui.multiple_tarifs_1.setEnabled(0)
+        self.ui.multiple_tarifs_2.setEnabled(0)
+        self.ui.multiple_tarifs_3.setEnabled(0)
+        self.ui.multiple_tarifs_4.setEnabled(0)
+        self.ui.multiple_tarifs_5.setEnabled(0)
+        self.ui.multiple_tarifs_6.setEnabled(0)
+
 
         global restrict_mode
         if restrict_mode:
@@ -1007,6 +1074,178 @@ class DossierDialog(QDialog):
     def open_create_fili(self):
         fili_interface = Fili()
         fili_interface.exec()
+
+    def activer_calcul_tarif(self):
+        global tarif_multiple_1
+        global tarif_multiple_2
+        global tarif_multiple_3
+        global tarif_multiple_4
+        global tarif_multiple_tour_5
+        global tarif_multiple_tour_6
+        global tarif_1
+        global tarif_2
+        global tarif_3
+        global tarif_4
+        global tarif_5
+        global tarif_6
+        global tarif_supp
+        global calcul_tarif_auto
+
+        if self.ui.Tarifs_auto_checkbox.isChecked():
+            calcul_tarif_auto = 1
+            self.ui.tarif_checkbox_1.setEnabled(1)
+            self.ui.tarif_checkbox_2.setEnabled(1)
+            self.ui.tarif_checkbox_3.setEnabled(1)
+            self.ui.tarif_checkbox_4.setEnabled(1)
+            self.ui.tarif_checkbox_5.setEnabled(1)
+            self.ui.tarif_checkbox_6.setEnabled(1)
+            self.ui.tarif_1.setEnabled(1)
+            self.ui.tarif_2.setEnabled(1)
+            self.ui.tarif_3.setEnabled(1)
+            self.ui.tarif_4.setEnabled(1)
+            self.ui.tarif_5.setEnabled(1)
+            self.ui.tarif_6.setEnabled(1)
+            self.ui.multiple_tarifs_1.setEnabled(1)
+            self.ui.multiple_tarifs_2.setEnabled(1)
+            self.ui.multiple_tarifs_3.setEnabled(1)
+            self.ui.multiple_tarifs_4.setEnabled(1)
+            self.ui.multiple_tarifs_5.setEnabled(1)
+            self.ui.multiple_tarifs_6.setEnabled(1)
+
+            self.set_tarif()
+            self.ui.frame.setStyleSheet("""
+                    QLabel{
+                        color:white;
+                        border : none;}
+                    QFrame{
+                            border-radius:5px;
+                            border:none}
+                    QSpinBox {
+                       background-color: rgb(41,42,43);
+                            color:white;}
+                    QDoubleSpinBox{
+                            background-color:rgb(41,42,43);
+                            color:white;
+                            border:none;
+                            border-radius:5px;}
+                    QCheckBox::indicator {
+                            background-color: rgb(41,42,43);
+                            border: none;
+                            border-radius: 5px;}
+                    QCheckBox::indicator:unchecked {
+                        background-color: rgb(41,42,43);}
+                    QCheckBox::indicator:unchecked:hover {
+                        background-color: rgb(255,0,127);}
+                    QCheckBox::indicator:unchecked:pressed {
+                        background-color: rgb(185,0,92); }
+                    QCheckBox::indicator:checked {
+                            border:4px solid rgb(101,102,103);
+                        background-color: rgb(151,152,153);}
+                    QCheckBox::indicator:checked:hover {
+                            border:4px solid rgb(255,0,127);}
+                    QCheckBox::indicator:checked:pressed {
+                            border:4px solid rgb(185,0,92); }""")
+        else :
+            calcul_tarif_auto = 0
+            self.ui.tarif_checkbox_1.setEnabled(0)
+            self.ui.tarif_checkbox_2.setEnabled(0)
+            self.ui.tarif_checkbox_3.setEnabled(0)
+            self.ui.tarif_checkbox_4.setEnabled(0)
+            self.ui.tarif_checkbox_5.setEnabled(0)
+            self.ui.tarif_checkbox_6.setEnabled(0)
+            self.ui.tarif_1.setEnabled(0)
+            self.ui.tarif_2.setEnabled(0)
+            self.ui.tarif_3.setEnabled(0)
+            self.ui.tarif_4.setEnabled(0)
+            self.ui.tarif_5.setEnabled(0)
+            self.ui.tarif_6.setEnabled(0)
+            self.ui.multiple_tarifs_1.setEnabled(0)
+            self.ui.multiple_tarifs_2.setEnabled(0)
+            self.ui.multiple_tarifs_3.setEnabled(0)
+            self.ui.multiple_tarifs_4.setEnabled(0)
+            self.ui.multiple_tarifs_5.setEnabled(0)
+            self.ui.multiple_tarifs_6.setEnabled(0)
+            self.ui.frame.setStyleSheet("""
+                    QLabel{
+                        color:rgb(160,160,160);
+                        border : none;}
+                    QFrame{
+                            border-radius:5px;
+                            border:none}
+                    QSpinBox {
+                       background-color: rgb(41,42,43);
+                            color:rgb(160,160,160);}
+                    QDoubleSpinBox{
+                            background-color:rgb(41,42,43);
+                            color:rgb(160,160,160);
+                            border:none;
+                            border-radius:5px;}
+                    QCheckBox::indicator {
+                            background-color: rgb(41,42,43);
+                            border: none;
+                            border-radius: 5px;}
+                    QCheckBox::indicator:unchecked {
+                        background-color: rgb(41,42,43);}
+                    QCheckBox::indicator:unchecked:hover {
+                        background-color: rgb(255,0,127);}
+                    QCheckBox::indicator:unchecked:pressed {
+                        background-color: rgb(185,0,92); }
+                    QCheckBox::indicator:checked {
+                            border:4px solid rgb(101,102,103);
+                        background-color: rgb(151,152,153);}
+                    QCheckBox::indicator:checked:hover {
+                            border:4px solid rgb(255,0,127);}
+                    QCheckBox::indicator:checked:pressed {
+                            border:4px solid rgb(185,0,92); }""")
+
+            tarif_multiple_1 = 0
+            tarif_multiple_2 = 0
+            tarif_multiple_3 = 0
+            tarif_multiple_4 = 0
+            tarif_multiple_tour_5 = 0
+            tarif_multiple_tour_6 = 0
+
+            tarif_1 = 0
+            tarif_2 = 0
+            tarif_3 = 0
+            tarif_4 = 0
+            tarif_5 = 0
+            tarif_6 = 0
+
+            tarif_supp = 0
+
+
+    def set_tarif(self):
+        global tarif_multiple_1
+        global tarif_multiple_2
+        global tarif_multiple_3
+        global tarif_multiple_4
+        global tarif_multiple_tour_5
+        global tarif_multiple_tour_6
+        global tarif_1
+        global tarif_2
+        global tarif_3
+        global tarif_4
+        global tarif_5
+        global tarif_6
+        global tarif_supp
+
+        tarif_multiple_1 = self.ui.multiple_tarifs_1.value()
+        tarif_multiple_2 = self.ui.multiple_tarifs_2.value()
+        tarif_multiple_3 = self.ui.multiple_tarifs_3.value()
+        tarif_multiple_4 = self.ui.multiple_tarifs_4.value()
+        tarif_multiple_tour_5 = self.ui.multiple_tarifs_5.value()
+        tarif_multiple_tour_6 = self.ui.multiple_tarifs_6.value()
+
+        tarif_1 = self.ui.tarif_1.value()
+        tarif_2 = self.ui.tarif_2.value()
+        tarif_3 = self.ui.tarif_3.value()
+        tarif_4 = self.ui.tarif_4.value()
+        tarif_5 = self.ui.tarif_5.value()
+        tarif_6 = self.ui.tarif_6.value()
+
+        tarif_supp = self.ui.tarif_supp.value()
+
 
     def fermer_application(self):
         # Ferme l'application
@@ -1449,6 +1688,22 @@ class MainWindow(QMainWindow):
             self.showNormal()
 
         self.show()
+
+    def calcul_tarif(self):
+        global tarif_multiple_1
+        global tarif_multiple_2
+        global tarif_multiple_3
+        global tarif_multiple_4
+        global tarif_multiple_tour_5
+        global tarif_multiple_tour_6
+        global tarif_1
+        global tarif_2
+        global tarif_3
+        global tarif_4
+        global tarif_5
+        global tarif_6
+        global tarif_supp
+        global calcul_tarif_auto
 
 
 #
