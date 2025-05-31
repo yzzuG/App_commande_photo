@@ -35,7 +35,7 @@ EXIF_ORIENTATION_TAG = next((k for k, v in ExifTags.TAGS.items() if v == "Orient
 
 selected_images = []
 data_save_folder = "C:"
-admin_password = ""
+admin_password = "Armus2025"
 photos_folder ="C:"
 fili_clair_path = ""
 fili_sombre_path = ""
